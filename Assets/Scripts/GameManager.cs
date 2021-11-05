@@ -65,11 +65,14 @@ public class GameManager : MonoBehaviour
 
     public void ScaffoingNextStep()
     {
-        for(int i=0; i<3; i++)
+        if(scaffoldingQueue.Count > 0)
         {
-            var scaf = scaffoldingQueue.Dequeue();
-            scaf.SetActive(true);
-            garbageScaffoldingQueue.Enqueue(scaf);
+            for(int i=0; i<3; i++)
+            {
+                var scaf = scaffoldingQueue.Dequeue();
+                scaf.SetActive(true);
+                garbageScaffoldingQueue.Enqueue(scaf);
+            }
         }
     }
 
