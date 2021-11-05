@@ -73,6 +73,22 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void ResetScaffolding()
+    {
+        // 아직 garbage큐에 들어가지않은 활성화된 발판을 gargabe큐에 전부 넣기
+        while(scaffoldingQueue.Count > 0)
+            garbageScaffoldingQueue.Enqueue(scaffoldingQueue.Dequeue());
+
+        // 모든 발판 다시 활성화발판 큐에 집어넣기
+        while(garbageScaffoldingQueue.Count > 0)
+        {
+            var tmpScaffolding = garbageScaffoldingQueue.Dequeue();
+            tmpScaffolding.SetActive(false);
+            tmpScaffolding.GetComponent<Collider>().enabled = true;
+            scaffoldingQueue.Enqueue(tmpScaffolding);
+        }
+    }
+
     public void SpawnPlayer()
     {
         ObjectPooler.SpawnFromPool("Player", spawnPoint.position);

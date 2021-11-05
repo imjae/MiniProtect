@@ -41,6 +41,9 @@ public class Player : Character
         {
             gameObject.SetActive(false);
             GameManager.Instance.SpawnPlayer();
+
+            GameManager.Instance.ResetScaffolding();
+            GameManager.Instance.ScaffoingNextStep();
         }
     }
 
