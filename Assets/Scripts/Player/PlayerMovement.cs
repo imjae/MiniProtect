@@ -4,38 +4,36 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    Transform mainCamera;
+    public CharacterController controller;
 
-    void Start()
-    {
-        mainCamera = Camera.main.gameObject.transform;
 
-        Debug.Log(transform.TransformDirection(mainCamera.forward));
-        Debug.Log(transform.TransformDirection(mainCamera.right));
+    public float gravity = -9.81f;
+    public Transform groundCheck;
+    public float groundDistance = 0.4f;
+    public LayerMask groundMask;
 
-    }
+    Vector3 velocity;
+    bool isGrounded;
 
     void Update()
     {
-        float x = Input.GetAxisRaw("Horizontal");
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+
+        if(isGrounded && velocity.y < 0)
+            velocity.y = -2f;
+
+        velocity.y += gravity * Time.deltaTime;
+        controller.Move(velocity * Time.deltaTime);
     }
 
     public void InputMovement(Rigidbody rigid, float moveSpeed)
     {
-        Vector3 forward = mainCamera.forward;
-        Vector3 right = mainCamera.right;
+        float x = Input.GetAxis("Horizontal");
+        float z = Input.GetAxis("Vertical");
 
-        Vector3 moveDirection =
-                    forward * Input.GetAxisRaw("Vertical") +
-                    right * Input.GetAxisRaw("Horizontal");
+        Vector3 moveDirection = transform.forward * z + transform.right * x;
 
-        // Debug.Log(moveDirection);
-
-        rigid.velocity = moveDirection.normalized * moveSpeed;
-
-        // transform.position = moveDirection.normalized * Time.deltaTime * moveSpeed;
-
-        // transform.Translate(transform.position + (moveDirection.normalized * moveSpeed));
+        controller.Move(moveDirection * moveSpeed * Time.deltaTime);
     }
 
     public void InputJump(Rigidbody rigid, float jumpPower, bool isGround)
@@ -45,6 +43,5 @@ public class PlayerMovement : MonoBehaviour
             Debug.Log("มกวม");
             rigid.AddForce(Vector3.up * jumpPower);
         }
-            
     }
 }
