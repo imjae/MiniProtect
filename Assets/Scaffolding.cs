@@ -4,8 +4,25 @@ using UnityEngine;
 
 public class Scaffolding : MonoBehaviour
 {
+    bool isStepped = true;
+
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("¹ßÆÇ !");
+        if(gameObject.CompareTag("Scaffolding"))
+        {
+            isStepped = false;
+            GameManager.Instance.ScaffoingNextStep();
+            StartCoroutine(BrokeScaffold(3f));
+        }
+        else if(gameObject.CompareTag("NotScaffolding"))
+        {
+            StartCoroutine(BrokeScaffold(.5f));
+        }
+    }
+
+    IEnumerator BrokeScaffold(float time)
+    {
+        yield return new WaitForSeconds(time);
+        gameObject.GetComponent<Collider>().enabled = false;
     }
 }

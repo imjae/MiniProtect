@@ -34,4 +34,19 @@ public class Player : Character
         // 몬스터 기본 Die 동작
         throw new System.NotImplementedException();
     }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("DieTrigger"))
+        {
+            gameObject.SetActive(false);
+            GameManager.Instance.SpawnPlayer();
+        }
+    }
+
+
+    void OnDisable()
+    {
+        ObjectPooler.ReturnToPool(gameObject);
+    }
 }

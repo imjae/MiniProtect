@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
     public Queue<GameObject> garbageScaffoldingQueue;
     public Transform scaffoldingDir;
 
+    public Transform spawnPoint;
+
     public static GameManager Instance
     {
         get
@@ -48,6 +50,8 @@ public class GameManager : MonoBehaviour
         AddScaffolding();
 
         ScaffoingNextStep();
+
+        SpawnPlayer();
     }
 
 
@@ -59,7 +63,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void ScaffoingNextStep()
+    public void ScaffoingNextStep()
     {
         for(int i=0; i<3; i++)
         {
@@ -67,5 +71,10 @@ public class GameManager : MonoBehaviour
             scaf.SetActive(true);
             garbageScaffoldingQueue.Enqueue(scaf);
         }
+    }
+
+    public void SpawnPlayer()
+    {
+        ObjectPooler.SpawnFromPool("Player", spawnPoint.position);
     }
 }
