@@ -7,6 +7,10 @@ public class GameManager : MonoBehaviour
     private static GameManager _instance;
     public GameObject player;
 
+    public Queue<GameObject> scaffoldingQueue;
+    public Queue<GameObject> garbageScaffoldingQueue;
+    public Transform scaffoldingDir;
+
     public static GameManager Instance
     {
         get
@@ -35,7 +39,33 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        scaffoldingQueue = new Queue<GameObject>();
+        garbageScaffoldingQueue = new Queue<GameObject>();
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        AddScaffolding();
+
+        ScaffoingNextStep();
+    }
+
+
+    void AddScaffolding()
+    {
+        for (int i = 0; i < scaffoldingDir.childCount; i++)
+        {
+            scaffoldingQueue.Enqueue(scaffoldingDir.GetChild(i).gameObject);
+        }
+    }
+
+    void ScaffoingNextStep()
+    {
+        for(int i=0; i<3; i++)
+        {
+            var scaf = scaffoldingQueue.Dequeue();
+            scaf.SetActive(true);
+            garbageScaffoldingQueue.Enqueue(scaf);
+        }
     }
 }
