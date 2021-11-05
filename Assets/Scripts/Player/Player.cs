@@ -5,10 +5,9 @@ using UnityEngine;
 public class Player : Character
 {
     PlayerMovement movementScript;
-    PlayerRotation rotationScript;
     Rigidbody rigid;
 
-    float jumpPower;
+    public float jumpPower;
 
     bool isGround;
 
@@ -21,8 +20,6 @@ public class Player : Character
 
         if (!TryGetComponent<PlayerMovement>(out movementScript))
             Debug.LogError("PlayerMovement 스크립트 컴포넌트 없음");
-        if (!TryGetComponent<PlayerRotation>(out rotationScript))
-            Debug.LogError("PlayerRotation 스크립트 컴포넌트 없음");
         if (!TryGetComponent<Rigidbody>(out rigid))
             Debug.LogError("Rigidbody 컴포넌트 없음");
     }
@@ -30,7 +27,7 @@ public class Player : Character
     // Update is called once per frame
     void Update()
     {
-        rotationScript.InputRotation();
+        // rotationScript.InputRotation();
         
 
         Attack();
@@ -55,21 +52,25 @@ public class Player : Character
         throw new System.NotImplementedException();
     }
 
-    void OnTriggerEnter(Collider other)
+
+
+
+    void OnCollisionEnter(Collision other)
     {
-        if(other.CompareTag("Ground"))
+        if(other.gameObject.CompareTag("Ground"))
         {
-            Debug.Log(isGround);
+            Debug.Log("collision" + isGround);
             isGround = true;
         }
     }
 
-    void OnTriggerExit(Collider other)
+    void OnCollisionExit(Collision other)
     {
-        if(other.CompareTag("Ground"))
+        if(other.gameObject.CompareTag("Ground"))
         {
-            Debug.Log(isGround);
+            Debug.Log("collision" + isGround);
             isGround = false;
         }
     }
+
 }
